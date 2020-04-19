@@ -1,5 +1,5 @@
 
-function [x,neigh]= monte_carlo ( N, T, iter,x )
+function [x,neigh,E,M]= monte_carlo ( N, T, iter,x )
 
 
   
@@ -17,6 +17,9 @@ function [x,neigh]= monte_carlo ( N, T, iter,x )
       x(index) = -x(index) ; 
     
   end
+  
+  E= -0.5 * sum ( x.*neigh, 'all' ); 
+   M = sum ( x, 'all' ) / N ;
   
 %%%%%%%%%%%%% GIF GENERATOR %%%%%%%%%%%%%%%%%%
 %                                            %

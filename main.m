@@ -2,13 +2,13 @@ clear all
 clc 
 
 % Numero di iterazioni e dimensione del sistema 
-N = 12 ;
-iter = 10*N ; 
+N = 24 ;
+iter = N^3; 
 
 
 % Vettore delle temperature
 Tc = 2/log(1+sqrt(2)) ;  % Temperatura di curie
-T_span = [ 0 : Tc/2 : 5*Tc ] ; 
+T_span = [ 0 : Tc/100 : 3*Tc ] ; 
 
 
 % Initialize the energy and magnetization vector
@@ -21,19 +21,19 @@ init = rand ( N ) - 0.5 ;
 init = sign ( init ) ;
  
 % Incresing index 
-i = 1 ; 
+
 
 % Compute monte carlo for different temperature
 
-   for T = drange(T_span)  
+   parfor i = 1:numel(T_span) ;  
 
     
 
-   [x,neigh] = monte_carlo(N,T,iter,init) ; 
+   [x,neigh,E(i),M(i)] = monte_carlo(N,T_span(i),iter,init) ; 
   
-   E(i)= -0.5 * sum ( x.*neigh, 'all' ); 
-   M(i) = sum ( x, 'all' ) / N ;
-   i = i +1 ;
+%    E(i)= -0.5 * sum ( x.*neigh, 'all' ); 
+%    M(i) = sum ( x, 'all' ) / N ;
+%    i = i +1 ;
     
    end
 
@@ -47,7 +47,7 @@ close all
 % Handle to the figure E vs T/Tc
 E_plot = figure('Name','2D Ising Model') 
 
-plot(T_span/Tc,E) 
+scatter(T_span/Tc,E) 
 
 E_plot.CurrentAxes.YLabel.String = 'E'
 E_plot.CurrentAxes.XLabel.String = 'T/Tc' ; 
@@ -57,8 +57,13 @@ E_plot.CurrentAxes.YGrid = 'on'
 
 M_plot = figure('Name','2D Ising Model') 
 
-plot( T_span/Tc, M ) 
+scatter( T_span/Tc, M ) 
 
+M_plot.CurrentAxes.YLabel.String = 'M'
+M_plot.CurrentAxes.XLabel.String = 'T/Tc' ; 
+M_plot.CurrentAxes.Title.String = 'Magnetization'
+M_plot.CurrentAxes.XGrid = 'on'
+M_plot.CurrentAxes.YGrid = 'on'
 
 
 
